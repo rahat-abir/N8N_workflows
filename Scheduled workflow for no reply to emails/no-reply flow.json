@@ -45,7 +45,7 @@
       "name": "Google Gemini Chat Model",
       "credentials": {
         "googlePalmApi": {
-          "id": "aOjYsWSoHbArwmMY",
+          "id": "key",
           "name": "Google Gemini(PaLM) Api account"
         }
       },
@@ -79,9 +79,9 @@
       "parameters": {
         "authentication": "nocoDbApiToken",
         "operation": "getAll",
-        "workspaceId": "wz9dqp98",
-        "projectId": "pujsagmk466tlah",
-        "table": "mpw681krd6ulp6j",
+        "workspaceId": "key",
+        "projectId": "key",
+        "table": "key",
         "options": {}
       },
       "type": "n8n-nodes-base.nocoDb",
@@ -94,7 +94,7 @@
       "name": "Get many rows1",
       "credentials": {
         "nocoDbApiToken": {
-          "id": "vkS4gYS0P5YblHKq",
+          "id": "key",
           "name": "NocoDB Token account"
         }
       }
@@ -194,9 +194,9 @@
       "parameters": {
         "authentication": "nocoDbApiToken",
         "operation": "update",
-        "workspaceId": "wz9dqp98",
-        "projectId": "pujsagmk466tlah",
-        "table": "mpw681krd6ulp6j",
+        "workspaceId": "key",
+        "projectId": "key",
+        "table": "key",
         "fieldsUi": {
           "fieldValues": [
             {
@@ -220,7 +220,7 @@
       "name": "Update a row1",
       "credentials": {
         "nocoDbApiToken": {
-          "id": "vkS4gYS0P5YblHKq",
+          "id": "key",
           "name": "NocoDB Token account"
         }
       }
@@ -245,8 +245,8 @@
         "authentication": "nocoDbApiToken",
         "operation": "getAll",
         "workspaceId": "wz9dqp98",
-        "projectId": "pujsagmk466tlah",
-        "table": "mpw681krd6ulp6j",
+        "projectId": "key",
+        "table": "key",
         "options": {}
       },
       "type": "n8n-nodes-base.nocoDb",
@@ -259,7 +259,7 @@
       "name": "Read database",
       "credentials": {
         "nocoDbApiToken": {
-          "id": "vkS4gYS0P5YblHKq",
+          "id": "key",
           "name": "NocoDB Token account"
         }
       },
@@ -285,9 +285,9 @@
       "parameters": {
         "authentication": "nocoDbApiToken",
         "operation": "update",
-        "workspaceId": "wz9dqp98",
-        "projectId": "p4g5nbjecew7wm4",
-        "table": "m8n045x8fvr5ftw",
+        "workspaceId": "key",
+        "projectId": "key",
+        "table": "key",
         "fieldsUi": {
           "fieldValues": [
             {
@@ -311,7 +311,7 @@
       "name": "update conversation",
       "credentials": {
         "nocoDbApiToken": {
-          "id": "vkS4gYS0P5YblHKq",
+          "id": "key",
           "name": "NocoDB Token account"
         }
       },
@@ -478,7 +478,7 @@
       "name": "Google Gemini Chat Model2",
       "credentials": {
         "googlePalmApi": {
-          "id": "aOjYsWSoHbArwmMY",
+          "id": "key",
           "name": "Google Gemini(PaLM) Api account"
         }
       }

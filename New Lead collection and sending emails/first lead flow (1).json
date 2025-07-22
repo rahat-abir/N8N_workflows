@@ -64,7 +64,7 @@
       "name": "Google Gemini Chat Model",
       "credentials": {
         "googlePalmApi": {
-          "id": "aOjYsWSoHbArwmMY",
+          "id": "key",
           "name": "Google Gemini(PaLM) Api account"
         }
       }
@@ -98,8 +98,8 @@
         "authentication": "nocoDbApiToken",
         "operation": "update",
         "workspaceId": "wz9dqp98",
-        "projectId": "pujsagmk466tlah",
-        "table": "mpw681krd6ulp6j",
+        "projectId": "key",
+        "table": "key",
         "fieldsUi": {
           "fieldValues": [
             {
@@ -123,7 +123,7 @@
       "name": "update conversation",
       "credentials": {
         "nocoDbApiToken": {
-          "id": "vkS4gYS0P5YblHKq",
+          "id": "key",
           "name": "NocoDB Token account"
         }
       }
@@ -153,7 +153,7 @@
       "webhookId": "e14d6f6f-3dc0-42f8-a0e5-e5decf983bbd",
       "credentials": {
         "facebookLeadAdsOAuth2Api": {
-          "id": "dsDkw7lXd4xbY0nW",
+          "id": "key",
           "name": "Facebook Lead Ads account"
         }
       },
@@ -176,7 +176,7 @@
       "name": "Send an SMS/MMS/WhatsApp message",
       "credentials": {
         "twilioApi": {
-          "id": "jHfjG15x8YTl99YM",
+          "id": "key",
           "name": "Twilio account"
         }
       }
@@ -261,9 +261,9 @@
       "parameters": {
         "authentication": "nocoDbApiToken",
         "operation": "create",
-        "workspaceId": "wz9dqp98",
-        "projectId": "pujsagmk466tlah",
-        "table": "mpw681krd6ulp6j",
+        "workspaceId": "key",
+        "projectId": "key",
+        "table": "key",
         "fieldsUi": {
           "fieldValues": [
             {
@@ -307,7 +307,7 @@
       "name": "Create a row",
       "credentials": {
         "nocoDbApiToken": {
-          "id": "vkS4gYS0P5YblHKq",
+          "id": "key",
           "name": "NocoDB Token account"
         }
       }

@@ -40,7 +40,7 @@
       "id": "c2cde6b3-b9b7-4e78-acc8-e7037831c00e",
       "credentials": {
         "redditOAuth2Api": {
-          "id": "noZjMsRyDmShPxQp",
+          "id": "key",
           "name": "Reddit account"
         }
       },
@@ -70,7 +70,7 @@
       "id": "1f323e1d-29d3-4757-aaed-69a40f43eceb",
       "credentials": {
         "googleDocsOAuth2Api": {
-          "id": "yJW6vmOmIyl5g5Y3",
+          "id": "key",
           "name": "Google Docs account 2"
         }
       },
@@ -111,7 +111,7 @@
       "name": "Google Gemini Chat Model",
       "credentials": {
         "googlePalmApi": {
-          "id": "l2C2iRDApWh04ZKB",
+          "id": "key",
           "name": "Google Gemini(PaLM) Api account"
         }
       }
@@ -134,7 +134,7 @@
       "name": "Create a post",
       "credentials": {
         "wordpressApi": {
-          "id": "2aJHlgLdTgi50hWn",
+          "id": "key",
           "name": "Wordpress account"
         }
       }
@@ -205,7 +205,7 @@
       "name": "Get row(s) in sheet",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "hkMZlqjR5s6SFQnP",
+          "id": "key",
           "name": "Google Sheets account"
         }
       }
@@ -280,7 +280,7 @@
       "name": "Google Gemini Chat Model1",
       "credentials": {
         "googlePalmApi": {
-          "id": "l2C2iRDApWh04ZKB",
+          "id": "key",
           "name": "Google Gemini(PaLM) Api account"
         }
       }
@@ -303,7 +303,7 @@
       "name": "Create a post1",
       "credentials": {
         "wordpressApi": {
-          "id": "2aJHlgLdTgi50hWn",
+          "id": "key",
           "name": "Wordpress account"
         }
       }

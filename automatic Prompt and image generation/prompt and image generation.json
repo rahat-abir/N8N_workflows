@@ -35,7 +35,7 @@
       "name": "OpenAI",
       "credentials": {
         "openAiApi": {
-          "id": "kTWlML49D9NRlX7Z",
+          "id": "key",
           "name": "OpenAi account"
         }
       },
@@ -153,7 +153,7 @@
           "parameters": [
             {
               "name": "xi-api-key",
-              "value": "sk_bd750e5322b025dc93aeb7324ea4bf9f136238b160c55d55"
+              "value": "APi here"
             }
           ]
         },
@@ -362,7 +362,7 @@
       "name": "recipe-gen",
       "credentials": {
         "openAiApi": {
-          "id": "kTWlML49D9NRlX7Z",
+          "id": "Key",
           "name": "OpenAi account"
         }
       }
@@ -394,7 +394,7 @@
       "name": "image-prompt-gen",
       "credentials": {
         "openAiApi": {
-          "id": "kTWlML49D9NRlX7Z",
+          "id": "Key",
           "name": "OpenAi account"
         }
       },
@@ -561,7 +561,7 @@
       "name": "video-PRE-prompt",
       "credentials": {
         "openAiApi": {
-          "id": "kTWlML49D9NRlX7Z",
+          "id": "key",
           "name": "OpenAi account"
         }
       }
@@ -644,7 +644,7 @@
       "name": "OpenAI1",
       "credentials": {
         "openAiApi": {
-          "id": "kTWlML49D9NRlX7Z",
+          "id": "key",
           "name": "OpenAi account"
         }
       }
@@ -687,7 +687,7 @@
       "name": "OpenAI2",
       "credentials": {
         "openAiApi": {
-          "id": "kTWlML49D9NRlX7Z",
+          "id": "key",
           "name": "OpenAi account"
         }
       }
@@ -728,7 +728,7 @@
       "name": "video-FINAL*prompt",
       "credentials": {
         "openAiApi": {
-          "id": "kTWlML49D9NRlX7Z",
+          "id": "key",
           "name": "OpenAi account"
         }
       }

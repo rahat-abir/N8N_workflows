@@ -80,9 +80,9 @@
       "parameters": {
         "authentication": "nocoDbApiToken",
         "operation": "getAll",
-        "workspaceId": "wz9dqp98",
-        "projectId": "pujsagmk466tlah",
-        "table": "mpw681krd6ulp6j",
+        "workspaceId": "key",
+        "projectId": "key",
+        "table": "key",
         "options": {
           "where": "=(lead email,eq,{{ $json['email address'] }})"
         }
@@ -98,7 +98,7 @@
       "alwaysOutputData": true,
       "credentials": {
         "nocoDbApiToken": {
-          "id": "vkS4gYS0P5YblHKq",
+          "id": "key",
           "name": "NocoDB Token account"
         }
       }
@@ -134,7 +134,7 @@
       "name": "Google Gemini Chat Model",
       "credentials": {
         "googlePalmApi": {
-          "id": "aOjYsWSoHbArwmMY",
+          "id": "key",
           "name": "Google Gemini(PaLM) Api account"
         }
       }
@@ -167,9 +167,9 @@
       "parameters": {
         "authentication": "nocoDbApiToken",
         "operation": "update",
-        "workspaceId": "wz9dqp98",
-        "projectId": "pujsagmk466tlah",
-        "table": "mpw681krd6ulp6j",
+        "workspaceId": "key",
+        "projectId": "key",
+        "table": "key",
         "fieldsUi": {
           "fieldValues": [
             {
@@ -193,7 +193,7 @@
       "name": "update conversation",
       "credentials": {
         "nocoDbApiToken": {
-          "id": "vkS4gYS0P5YblHKq",
+          "id": "key",
           "name": "NocoDB Token account"
         }
       },
@@ -216,7 +216,7 @@
       "webhookId": "89833eb2-7742-4a06-bb1a-83e0302715dc",
       "credentials": {
         "twilioApi": {
-          "id": "jHfjG15x8YTl99YM",
+          "id": "key",
           "name": "Twilio account"
         }
       }
@@ -253,7 +253,7 @@
       "name": "Send an SMS/MMS/WhatsApp message",
       "credentials": {
         "twilioApi": {
-          "id": "jHfjG15x8YTl99YM",
+          "id": "key",
           "name": "Twilio account"
         }
       }
@@ -262,9 +262,9 @@
       "parameters": {
         "authentication": "nocoDbApiToken",
         "operation": "update",
-        "workspaceId": "wz9dqp98",
-        "projectId": "pujsagmk466tlah",
-        "table": "mpw681krd6ulp6j",
+        "workspaceId": "key",
+        "projectId": "key",
+        "table": "key",
         "fieldsUi": {
           "fieldValues": [
             {
@@ -288,7 +288,7 @@
       "name": "update conversation1",
       "credentials": {
         "nocoDbApiToken": {
-          "id": "vkS4gYS0P5YblHKq",
+          "id": "key",
           "name": "NocoDB Token account"
         }
       },
@@ -298,9 +298,9 @@
       "parameters": {
         "authentication": "nocoDbApiToken",
         "operation": "getAll",
-        "workspaceId": "wz9dqp98",
-        "projectId": "pujsagmk466tlah",
-        "table": "mpw681krd6ulp6j",
+        "workspaceId": "key",
+        "projectId": "key",
+        "table": "key",
         "options": {
           "where": "=(lead email,eq,{{ $json['email address'] }})"
         }
@@ -315,7 +315,7 @@
       "name": "Get many rows1",
       "credentials": {
         "nocoDbApiToken": {
-          "id": "vkS4gYS0P5YblHKq",
+          "id": "key",
           "name": "NocoDB Token account"
         }
       },
@@ -352,7 +352,7 @@
       "name": "Google Gemini Chat Model1",
       "credentials": {
         "googlePalmApi": {
-          "id": "aOjYsWSoHbArwmMY",
+          "id": "key",
           "name": "Google Gemini(PaLM) Api account"
         }
       }
@@ -434,7 +434,7 @@
       "name": "Get a row in NocoDB",
       "credentials": {
         "nocoDbApiToken": {
-          "id": "vkS4gYS0P5YblHKq",
+          "id": "key",
           "name": "NocoDB Token account"
         }
       },
