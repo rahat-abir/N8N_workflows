@@ -1,0 +1,30 @@
+# Ignore environment files
+.env
+.env.local
+.env.*.local
+
+# Ignore credentials
+*.key
+*.pem
+*.p12
+*.crt
+
+# Ignore node modules and build files
+node_modules/
+dist/
+build/
+
+# Ignore Python caches (if using Python)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore IDE/project settings
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
