@@ -10,7 +10,8 @@ This repository contains a collection of **n8n automation workflows** designed f
 - **Files:**
   - `reddit post final.json` – n8n workflow for pulling posts from Reddit and publishing to a personal blog.
   - **Visualization:**
-    <img width="1120" height="569" alt="reddit post scrapper" src="https://github.com/user-attachments/assets/66eceaac-165b-4435-b076-cc27343aee13" />
+    <img width="1120" height="569" alt="reddit post scrapper" src="https://github.com/user-attachments/assets/62efc459-64a2-4dfd-aad8-a5d04132a3cd" />
+
 
 
 ---
@@ -19,7 +20,8 @@ This repository contains a collection of **n8n automation workflows** designed f
 - **Files:**
   - `first lead flow (1).json` – Workflow for capturing new leads and sending automated emails.
   - **Visualization:**
-    <img width="1465" height="703" alt="wix workflow" src="https://github.com/user-attachments/assets/63a6ecea-1b47-4563-882a-b59b83b1e803" />
+    <img width="1465" height="703" alt="wix workflow" src="https://github.com/user-attachments/assets/7e8cc667-30c0-4218-bbc1-e4e9ad234f45" />
+
 
 
 ---
@@ -28,7 +30,8 @@ This repository contains a collection of **n8n automation workflows** designed f
 - **Files:**
   - `reply workflow (1).json` – Workflow to handle replies and log email conversations.
   - **Visualization:**
-  <img width="1148" height="603" alt="reply workflow" src="https://github.com/user-attachments/assets/fd05f238-e72c-4bf8-a124-419f9d94b149" />
+  <img width="1148" height="603" alt="reply workflow" src="https://github.com/user-attachments/assets/87a87ddc-3341-48d2-b1fd-e262b810d5ad" />
+
 
 ---
 
@@ -36,7 +39,8 @@ This repository contains a collection of **n8n automation workflows** designed f
 - **Files:**
   - `no-reply flow.json` – Sends follow-up emails if there is no reply.
   - **Visualization:**
-  <img width="1102" height="412" alt="schedule workflow" src="https://github.com/user-attachments/assets/c3981eea-2cd1-44d3-be38-18c2b8370bac" />
+  <img width="1102" height="412" alt="schedule workflow" src="https://github.com/user-attachments/assets/a198751b-63a3-4d0e-bdac-2b29e976e1a7" />
+
 
 
 ---
@@ -45,7 +49,8 @@ This repository contains a collection of **n8n automation workflows** designed f
 - **Files:**
   - `google scrapper workflow.json` – Web scraping workflow for collecting data from Google.
   - **Visualization:**
-    <img width="1554" height="626" alt="scrapping workflow" src="https://github.com/user-attachments/assets/3848bdce-34ba-4d80-bb09-82a495e7094f" />
+    <img width="1554" height="626" alt="scrapping workflow" src="https://github.com/user-attachments/assets/fd2c3e16-fb87-4491-8774-e11edea7dfbf" />
+
 
 
 ---
@@ -54,7 +59,7 @@ This repository contains a collection of **n8n automation workflows** designed f
 - **Files:**
   - `prompt and image generation.json` – Uses AI to generate prompts and images.
   - **Visualization:**
-  <img width="1919" height="872" alt="prompt and image generation" src="https://github.com/user-attachments/assets/4cad02a2-4770-4b28-88d3-c429456b88af" />
+  <img width="1919" height="872" alt="prompt and image generation" src="https://github.com/user-attachments/assets/f7717079-07d2-45e9-96a1-c43d919b6137" />
 
 ---
 
