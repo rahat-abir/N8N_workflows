@@ -1,0 +1,625 @@
+{
+  "name": "reply workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "simple": false,
+        "filters": {},
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -720,
+        -60
+      ],
+      "id": "ef2d9ba5-dfb3-4784-bc36-3515309166db",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "s62rQ06FCqJLEWql",
+          "name": "Gmail account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3d58c83e-39d0-477e-8ad3-5f42a42237ee",
+              "name": "email id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "1140062c-2422-4ad3-a3f5-f6c10906d256",
+              "name": "email threadid",
+              "value": "={{ $json.threadId }}",
+              "type": "string"
+            },
+            {
+              "id": "df62382e-f5d8-488b-8058-658abc306072",
+              "name": "email address",
+              "value": "={{ $('Gmail Trigger').item.json.headers.to }}",
+              "type": "string"
+            },
+            {
+              "id": "834ed20b-8bd0-42bc-860b-89f0310d4197",
+              "name": "email body",
+              "value": "={{ $('Gmail Trigger').item.json.text }}",
+              "type": "string"
+            },
+            {
+              "id": "f221dd74-b3ea-425a-8209-edb008c4b4f4",
+              "name": "email subject",
+              "value": "={{ $('Gmail Trigger').item.json.headers.subject }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -280,
+        -60
+      ],
+      "id": "b38c95bb-5cd0-48af-968c-4a963f56eb71",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "authentication": "nocoDbApiToken",
+        "operation": "getAll",
+        "workspaceId": "wz9dqp98",
+        "projectId": "pujsagmk466tlah",
+        "table": "mpw681krd6ulp6j",
+        "options": {
+          "where": "=(lead email,eq,{{ $json['email address'] }})"
+        }
+      },
+      "type": "n8n-nodes-base.nocoDb",
+      "typeVersion": 3,
+      "position": [
+        -60,
+        -60
+      ],
+      "id": "50e79fca-cca7-408a-bcbc-788f45719316",
+      "name": "Get many rows",
+      "alwaysOutputData": true,
+      "credentials": {
+        "nocoDbApiToken": {
+          "id": "vkS4gYS0P5YblHKq",
+          "name": "NocoDB Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=new Email or reply: {{ $('Edit Fields').item.json['email body'] }}\n\n\n\nOriginal Subject:{{ $('Edit Fields').item.json['email subject'] }}",
+        "options": {
+          "systemMessage": "=You are the virtual assistant for **Harmony Booths**, a UK-based premium photo booth hire company known for delivering fun, professional, and stylish experiences at weddings, private parties, and corporate events.\n\ndo not include symbols like: ```json and the word body_text\n\nYou receive incoming emails from potential customers. Your job is to:\n\n1. Detect if this is:\n   - A **reply to a previous email** (i.e., part of an existing conversation), or\n   - A **new inquiry** (no prior history with the customer)\n\n2. Based on that:\n   - If it's a reply, **continue the conversation** in a helpful, polite, and persuasive way.\n   - If it's a new lead, **introduce Harmony Booths**, highlight key services (modern booths, custom props, high-res prints, great staff), and encourage them to book or ask further questions.\n\n3. Maintain a warm, friendly, professional tone that reflects a helpful UK business.\n\n4. The reply should address the customer's message clearly and always aim to **move the lead closer to booking**.\n5. If customer ask for payment link or how to pay . send this text \n\" 2 hour booking : \nhttps://buy.stripe.com/00weVfezB0LA4Hd60028810\n\n3 hours :\nhttps://buy.stripe.com/14A8wR8bdama3D974428811\n\n4 hours:\nhttps://buy.stripe.com/14A8wR8bdama3D974428811 \n\"\n\nIf the customer asks any of these questions in their original enquiry, answer them naturally,here are some examples:\n\n1.⁠ ⁠Can I see some examples of your setup or past events?\nRespond: “We’ve captured memories at weddings, birthdays and corporate events all over London – I’d be happy to send over some photos or videos of previous setups if you’d like.”\n\n2.⁠ ⁠Do you travel outside London?\nRespond: “We cover all of London and surrounding areas, with full delivery, setup, and pack down included.”\n\n3.⁠ ⁠Can we customise the backdrop or props?\nRespond: “Absolutely! We offer a range of stylish backdrops and fun props to suit your theme – let me know what you have in mind.”\n\n4.⁠ ⁠What booth is it exactly?\nRespond: “We use a sleek, modern selfie pod that looks great at all venues and delivers instant high-quality prints.”\n\n\n---\n\n### input Email Context:\n\n**new Email/reply:**  \n\n**Previous Conversation (if any):**  \n\n**Original Subject:**  \n\n---\n\n### Output your response in plain text. Do not include any conversation data in the output; only give out the email reply.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        140,
+        -60
+      ],
+      "id": "21359de4-4874-4936-95ca-840804258d40",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        100,
+        120
+      ],
+      "id": "02a3ac5f-a468-44a0-92d8-8487dad2eb2f",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "aOjYsWSoHbArwmMY",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Gmail Trigger').item.json.from.value[0].address }}",
+        "subject": "=Reply to your enquiry about HARMONY BOOTHS",
+        "emailType": "text",
+        "message": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        520,
+        -60
+      ],
+      "id": "6a02d268-c6b7-46ae-8b26-2122e0095b67",
+      "name": "Send a message",
+      "webhookId": "d0c25ddb-9f1c-4250-8037-6d332730c9eb",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "s62rQ06FCqJLEWql",
+          "name": "Gmail account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "nocoDbApiToken",
+        "operation": "update",
+        "workspaceId": "wz9dqp98",
+        "projectId": "pujsagmk466tlah",
+        "table": "mpw681krd6ulp6j",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldName": "=Id",
+              "fieldValue": "={{ $('Get many rows').item.json.Id }}"
+            },
+            {
+              "fieldName": "conversation history",
+              "fieldValue": "={{ $('Get many rows').item.json['conversation history'] }}\nnew reply: {{ $('Edit Fields').item.json['email body'] }}\ndate: {{ new Date() }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.nocoDb",
+      "typeVersion": 3,
+      "position": [
+        840,
+        -60
+      ],
+      "id": "1e86e53a-d7c2-4164-9f09-e7b6455ecff6",
+      "name": "update conversation",
+      "credentials": {
+        "nocoDbApiToken": {
+          "id": "vkS4gYS0P5YblHKq",
+          "name": "NocoDB Token account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "updates": [
+          "com.twilio.messaging.inbound-message.received"
+        ]
+      },
+      "type": "n8n-nodes-base.twilioTrigger",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        340
+      ],
+      "id": "8e23aafa-daf7-426c-81af-2729aa71f187",
+      "name": "Twilio Trigger",
+      "webhookId": "89833eb2-7742-4a06-bb1a-83e0302715dc",
+      "credentials": {
+        "twilioApi": {
+          "id": "jHfjG15x8YTl99YM",
+          "name": "Twilio account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Edit Fields').item.json['email body'] }}",
+        "contextWindowLength": 500
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        280,
+        180
+      ],
+      "id": "9088a3de-2f6c-43e8-b273-9257b7c19ea2",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "from": "+447380951496",
+        "to": "={{ $('Twilio Trigger').item.json.data.from }}",
+        "message": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        400,
+        340
+      ],
+      "id": "e731d5b1-255a-4bca-8a42-92aaa96f66de",
+      "name": "Send an SMS/MMS/WhatsApp message",
+      "credentials": {
+        "twilioApi": {
+          "id": "jHfjG15x8YTl99YM",
+          "name": "Twilio account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "nocoDbApiToken",
+        "operation": "update",
+        "workspaceId": "wz9dqp98",
+        "projectId": "pujsagmk466tlah",
+        "table": "mpw681krd6ulp6j",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldName": "=Id",
+              "fieldValue": "={{ $json.Id }}"
+            },
+            {
+              "fieldName": "conversation history",
+              "fieldValue": "={{ $json['conversation history'] }}\nnew reply: {{ $('Edit Fields1').item.json['email body'] }}\ndate: {{ new Date() }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.nocoDb",
+      "typeVersion": 3,
+      "position": [
+        1340,
+        840
+      ],
+      "id": "e7b44b39-f9f2-4736-8132-b1302c38589a",
+      "name": "update conversation1",
+      "credentials": {
+        "nocoDbApiToken": {
+          "id": "vkS4gYS0P5YblHKq",
+          "name": "NocoDB Token account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "authentication": "nocoDbApiToken",
+        "operation": "getAll",
+        "workspaceId": "wz9dqp98",
+        "projectId": "pujsagmk466tlah",
+        "table": "mpw681krd6ulp6j",
+        "options": {
+          "where": "=(lead email,eq,{{ $json['email address'] }})"
+        }
+      },
+      "type": "n8n-nodes-base.nocoDb",
+      "typeVersion": 3,
+      "position": [
+        1500,
+        620
+      ],
+      "id": "29125b7b-a413-4d8c-a109-199eddd98338",
+      "name": "Get many rows1",
+      "credentials": {
+        "nocoDbApiToken": {
+          "id": "vkS4gYS0P5YblHKq",
+          "name": "NocoDB Token account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.data.body }}",
+        "options": {
+          "systemMessage": "=You are the virtual assistant for **Harmony Booths**, a UK-based premium photo booth hire company known for delivering fun, professional, and stylish experiences at weddings, private parties, and corporate events.\n\ndo not include symbols like: ```json and the word body_text\n\nYou receive incoming emails from potential customers. Your job is to:\n\n1. Detect if this is:\n   - A **reply to a previous email** (i.e., part of an existing conversation), or\n   - A **new inquiry** (no prior history with the customer)\n\n2. Based on that:\n   - If it's a reply, **continue the conversation** in a helpful, polite, and persuasive way.\n   - If it's a new lead, **introduce Harmony Booths**, highlight key services (modern booths, custom props, high-res prints, great staff), and encourage them to book or ask further questions.\n\n3. Maintain a warm, friendly, professional tone that reflects a helpful UK business.\n\n4. The reply should address the customer's message clearly and always aim to **move the lead closer to booking**.\n5. If customer ask for payment link or how to pay . send this text \n\" 2 hour booking : \nhttps://buy.stripe.com/00weVfezB0LA4Hd60028810\n\n3 hours :\nhttps://buy.stripe.com/14A8wR8bdama3D974428811\n\n4 hours:\nhttps://buy.stripe.com/14A8wR8bdama3D974428811 \n\"\n\nIf the customer asks any of these questions in their original enquiry, answer them naturally,here are some examples:\n\n1.⁠ ⁠Can I see some examples of your setup or past events?\nRespond: “We’ve captured memories at weddings, birthdays and corporate events all over London – I’d be happy to send over some photos or videos of previous setups if you’d like.”\n\n2.⁠ ⁠Do you travel outside London?\nRespond: “We cover all of London and surrounding areas, with full delivery, setup, and pack down included.”\n\n3.⁠ ⁠Can we customise the backdrop or props?\nRespond: “Absolutely! We offer a range of stylish backdrops and fun props to suit your theme – let me know what you have in mind.”\n\n4.⁠ ⁠What booth is it exactly?\nRespond: “We use a sleek, modern selfie pod that looks great at all venues and delivers instant high-quality prints.”\n\nand this is the website link \" https://www.harmonybooths.com/ \"\n\n---\n\n### input Email Context:\n\n**new Email/reply:**  \n\n**Previous Conversation (if any):**  \n\n**Original Subject:**  \n\n---\n\n### Output your response in plain text. Do not include any conversation data in the output; only give out the email reply.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        20,
+        340
+      ],
+      "id": "96ea3fc3-3137-4c0e-a7f6-b2f8664bdc6f",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        20,
+        520
+      ],
+      "id": "71b5c955-a670-4087-a5cd-4f4cd6e93397",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "aOjYsWSoHbArwmMY",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.data.body }}",
+        "contextWindowLength": 500
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        140,
+        600
+      ],
+      "id": "aa7f331f-28d2-4852-91e3-ff763922c951",
+      "name": "Simple Memory1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3d58c83e-39d0-477e-8ad3-5f42a42237ee",
+              "name": "email id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "1140062c-2422-4ad3-a3f5-f6c10906d256",
+              "name": "email threadid",
+              "value": "={{ $json.threadId }}",
+              "type": "string"
+            },
+            {
+              "id": "df62382e-f5d8-488b-8058-658abc306072",
+              "name": "email address",
+              "value": "={{ $json.from.value[0].address }}",
+              "type": "string"
+            },
+            {
+              "id": "834ed20b-8bd0-42bc-860b-89f0310d4197",
+              "name": "email body",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            },
+            {
+              "id": "f221dd74-b3ea-425a-8209-edb008c4b4f4",
+              "name": "email subject",
+              "value": "={{ $json.headers.subject }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1340,
+        620
+      ],
+      "id": "be95382d-33cd-4d3f-8fea-4fefba1acb57",
+      "name": "Edit Fields1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "authentication": "nocoDbApiToken"
+      },
+      "type": "n8n-nodes-base.nocoDbTool",
+      "typeVersion": 3,
+      "position": [
+        1180,
+        400
+      ],
+      "id": "8c44073e-bf22-4fb9-9aee-9f2111a143c5",
+      "name": "Get a row in NocoDB",
+      "credentials": {
+        "nocoDbApiToken": {
+          "id": "vkS4gYS0P5YblHKq",
+          "name": "NocoDB Token account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "markAsRead",
+        "messageId": "={{ $json.id }}"
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -500,
+        -260
+      ],
+      "id": "6cec9634-cc7f-4a4e-b0b0-dc0df492a275",
+      "name": "Mark a message as read",
+      "webhookId": "ae72c6a2-386f-4a87-88d9-6d29273fbd0e",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "s62rQ06FCqJLEWql",
+          "name": "Gmail account 3"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Get many rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        []
+      ]
+    },
+    "Twilio Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send an SMS/MMS/WhatsApp message": {
+      "main": [
+        []
+      ]
+    },
+    "Get many rows1": {
+      "main": [
+        []
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory1": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Get many rows1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Send an SMS/MMS/WhatsApp message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a row in NocoDB": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "Mark a message as read": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "98ff196e-c106-4320-bf01-b42cbcefd3e1",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "02a7300900dff58ff67d68e47fea5bfddad5e95e430ab4d5e2dc431dd0d85888"
+  },
+  "id": "Ed2sBnXFAOMudwe2",
+  "tags": []
+}

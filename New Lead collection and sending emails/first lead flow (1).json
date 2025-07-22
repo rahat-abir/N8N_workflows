@@ -1,0 +1,399 @@
+{
+  "name": "first lead flow",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "event": "rowAdded",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        120,
+        -420
+      ],
+      "id": "bbd605e8-3a43-4262-afcd-a0e419974e79",
+      "name": "Google Sheets Trigger",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=name of the customer: {{ $json['Lead name'] }}\nnotes: {{ $json.notes }}\ndate: {{ $json['event date'] }}",
+        "options": {
+          "systemMessage": "=You are the owner of a photo booth hire service. The company name is Harmony Booths. \n\n\n*You should only generate:\n-body of the email in plain text: ------------\n\nThe email must include the following example:\nHi {name of the customer},\n\nThank you for your enquiry – I’d love to be part of your event on {date} in {location}!\n\n✨ What’s included:\n\nUnlimited prints for all your guests\n\nFun props & stylish backdrops\n\nA friendly attendant to help everyone\n\nA free guest book for memories\n\nDigital album sent to you after the event\n\nFull delivery, setup & pack down\n\n🪄 Prices:\n\n2 hours: £249\n\n3 hours: £299\n\n4 hours: £349\n\nLet me know what works best for you so we can secure your date!\n\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        760,
+        0
+      ],
+      "id": "5e884a01-0888-4bdb-9de9-70d7390a65fa",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        760,
+        180
+      ],
+      "id": "20c5ade2-33f6-4e41-b5d1-8d49c5e2df93",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "aOjYsWSoHbArwmMY",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Create a row').item.json['lead email'] }}",
+        "subject": "=Harmony Booths enquire!! for upcomming event 🎉🎉",
+        "emailType": "text",
+        "message": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1400,
+        -100
+      ],
+      "id": "09fe4e8a-9cad-4745-ad81-d858ca547dc6",
+      "name": "Send a message",
+      "webhookId": "5cc16fdd-6029-49b8-b521-5e6b919f23d3",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "s62rQ06FCqJLEWql",
+          "name": "Gmail account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "nocoDbApiToken",
+        "operation": "update",
+        "workspaceId": "wz9dqp98",
+        "projectId": "pujsagmk466tlah",
+        "table": "mpw681krd6ulp6j",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldName": "=Id",
+              "fieldValue": "={{ $('Create a row').item.json.Id }}"
+            },
+            {
+              "fieldName": "conversation history",
+              "fieldValue": "=email: {{ $json.output }}\ndate: {{ new Date() }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.nocoDb",
+      "typeVersion": 3,
+      "position": [
+        1400,
+        120
+      ],
+      "id": "34b2963c-98bb-4885-b9fe-2eed82141803",
+      "name": "update conversation",
+      "credentials": {
+        "nocoDbApiToken": {
+          "id": "vkS4gYS0P5YblHKq",
+          "name": "NocoDB Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "page": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "form": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.facebookLeadAdsTrigger",
+      "typeVersion": 1,
+      "position": [
+        -120,
+        -420
+      ],
+      "id": "895b7116-d1cc-4f0c-b952-6cd8603a3306",
+      "name": "Facebook Lead Ads Trigger",
+      "webhookId": "e14d6f6f-3dc0-42f8-a0e5-e5decf983bbd",
+      "credentials": {
+        "facebookLeadAdsOAuth2Api": {
+          "id": "dsDkw7lXd4xbY0nW",
+          "name": "Facebook Lead Ads account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "from": "+447380951496",
+        "to": "={{ $('Create a row').item.json['phone number'] }}",
+        "message": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        1400,
+        -320
+      ],
+      "id": "c0314364-7a21-4499-a41f-728a15216c7e",
+      "name": "Send an SMS/MMS/WhatsApp message",
+      "credentials": {
+        "twilioApi": {
+          "id": "jHfjG15x8YTl99YM",
+          "name": "Twilio account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lead-reply",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "961cba97-15ee-4004-b0c6-6f3c3c64487b",
+      "name": "Webhook1",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        120,
+        0
+      ],
+      "webhookId": "3a831a3b-fe7b-4bbb-8e15-678e9c756b11"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e4a0434a-fa4b-43c7-85f8-5884cf9c17a6",
+              "name": "First name",
+              "value": "={{ $json.body.data.submissions[0].value }}",
+              "type": "string"
+            },
+            {
+              "id": "6bb55277-fb32-4a26-aaab-68b18df7acda",
+              "name": "Last name",
+              "value": "={{ $json.body.data.submissions[1].value }}",
+              "type": "string"
+            },
+            {
+              "id": "90768604-226a-416d-b167-5b4e78e63f44",
+              "name": "Email",
+              "value": "={{ $json.body.data.submissions[2].value }}",
+              "type": "string"
+            },
+            {
+              "id": "928bd090-d5b4-4f85-bd4f-86d37d017692",
+              "name": "Phone number",
+              "value": "={{ $json.body.data.submissions[3].value }}",
+              "type": "string"
+            },
+            {
+              "id": "29ca1fa2-334b-4406-8fc0-721eeeca8d71",
+              "name": "Msg note",
+              "value": "={{ $json.body.data.submissions[5].value }}",
+              "type": "string"
+            },
+            {
+              "id": "5c402382-14cd-4a47-8f65-2412c6d4179a",
+              "name": "submissionTime",
+              "value": "={{ $json.body.data.submissionTime }}",
+              "type": "string"
+            },
+            {
+              "id": "7754579d-6fc1-4f62-8e9e-77ebf09add2d",
+              "name": "Date",
+              "value": "={{ $json.body.data.submissions[4].value }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        300,
+        0
+      ],
+      "id": "1cf4d66b-beca-4aa4-835d-ea5a84aed9b1",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "authentication": "nocoDbApiToken",
+        "operation": "create",
+        "workspaceId": "wz9dqp98",
+        "projectId": "pujsagmk466tlah",
+        "table": "mpw681krd6ulp6j",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldName": "Lead name",
+              "fieldValue": "={{ $json['First name'] }} {{ $json['Last name'] }}"
+            },
+            {
+              "fieldName": "phone number",
+              "fieldValue": "={{ $json['Phone number'] }}"
+            },
+            {
+              "fieldName": "lead email",
+              "fieldValue": "={{ $json.Email }}"
+            },
+            {
+              "fieldName": "lead source",
+              "fieldValue": "Wix forms"
+            },
+            {
+              "fieldName": "Lead status",
+              "fieldValue": "New Leads"
+            },
+            {
+              "fieldName": "notes",
+              "fieldValue": "={{ $json['Msg note'] }}"
+            },
+            {
+              "fieldName": "event date",
+              "fieldValue": "={{ $json.Date }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.nocoDb",
+      "typeVersion": 3,
+      "position": [
+        520,
+        0
+      ],
+      "id": "391d5bc3-38e7-43d3-8610-3cce2921b317",
+      "name": "Create a row",
+      "credentials": {
+        "nocoDbApiToken": {
+          "id": "vkS4gYS0P5YblHKq",
+          "name": "NocoDB Token account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "update conversation",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send an SMS/MMS/WhatsApp message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets Trigger": {
+      "main": [
+        []
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Create a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a row": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "f9a132b3-12c0-4837-9a88-5e67fe4c47a1",
+  "meta": {
+    "instanceId": "02a7300900dff58ff67d68e47fea5bfddad5e95e430ab4d5e2dc431dd0d85888"
+  },
+  "id": "l2nLULYYMOuF0nkI",
+  "tags": []
+}

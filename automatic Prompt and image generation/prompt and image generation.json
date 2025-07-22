@@ -1,0 +1,1091 @@
+{
+  "name": "vajunnie wellness",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "1d04bf4c-f489-4d9b-9ee8-76b155bf8f87",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        860
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "assistant",
+        "assistantId": {
+          "__rl": true,
+          "value": "asst_lVL2PoaWl3vKmx6zPaFrnnhN",
+          "mode": "list",
+          "cachedResultName": "vajunnie_story"
+        },
+        "prompt": "define",
+        "text": "={{$json[\"prompt\"]}}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        340,
+        -60
+      ],
+      "id": "2ebe57dc-1bee-4373-b4ff-e6c41a574dd1",
+      "name": "OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "kTWlML49D9NRlX7Z",
+          "name": "OpenAi account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $json.output || '';\n\nconst sentences = input\n  .split(/(?<=[.?!])\\s+/) // Split on ., ?, or !\n  .filter(s => s.trim().length > 0);\n\nreturn sentences.map(sentence => ({\n  json: {\n    sentence: sentence.trim()\n  }\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        716,
+        40
+      ],
+      "id": "efc7d4dc-4b3b-4583-a6ab-0fb07e3c555b",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1020,
+        -60
+      ],
+      "id": "a4ee5723-429b-427d-a2a9-2bb109a79baf",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "amount": 4
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1260,
+        -60
+      ],
+      "id": "f1705afb-c842-4a76-8fe9-553057f3258d",
+      "name": "Wait",
+      "webhookId": "8403cd11-0e92-4e28-a1c9-0bf2f6ae1ea8"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1680,
+        -60
+      ],
+      "id": "9c278680-1e2c-4b35-9693-d2730b63982c",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "https://queue.fal.run/fal-ai/kling-video/v2.1/standard/image-to-video",
+        "options": {},
+        "bodyParametersUi": {
+          "parameter": [
+            {
+              "name": "=prompt",
+              "value": "=  {{ $json.prompt }}"
+            },
+            {
+              "name": "=image_url",
+              "value": "=  {{ $json.image_url }}"
+            },
+            {
+              "name": "duration",
+              "value": "5"
+            },
+            {
+              "name": "negative_prompt",
+              "value": "slow motion, cartoony motion, blur, jitter, flicker, unstable framing, camera shake, ghosting trails, pixelation, ringing artifacts, oversharpening, washed-out colors, blown highlights, banding, warping, cloning artifacts, duplicated limbs, upper body distortion, misaligned joints, glitched hair strands, fabric tearing, clipping through props, motion stutter, dropped frames, ragdoll collapse, unintended splits, midair freeze, jerky looping, incorrect eye direction, mouth sync errors, shadow lag, inconsistent lighting"
+            },
+            {
+              "name": "cfg_scale",
+              "value": "0.5"
+            }
+          ]
+        },
+        "headerParametersUi": {
+          "parameter": [
+            {
+              "name": "Authorization",
+              "value": "Key 5ff1c3a5-ad7d-4a1c-a29d-48c868b0fd7e:8bd25f59a623a06f690de0541f4876da"
+            },
+            {
+              "name": "Content-Type",
+              "value": " application/json"
+            }
+          ]
+        }
+      },
+      "id": "f8b3112c-3196-49d9-9ee6-c1312cbd9db2",
+      "name": "KLING",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        3640,
+        1080
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.elevenlabs.io/v1/text-to-speech/JGrMa0BxwMJJd29DAE7w",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "xi-api-key",
+              "value": "sk_bd750e5322b025dc93aeb7324ea4bf9f136238b160c55d55"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "text",
+              "value": "= {{$json.sentence}}"
+            },
+            {
+              "name": "model_id",
+              "value": "eleven_multilingual_v2"
+            },
+            {
+              "name": "voice_settings.stability",
+              "value": " 0.5"
+            },
+            {
+              "name": "voice_settings.similarity_boost",
+              "value": "0.75"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1480,
+        -60
+      ],
+      "id": "b3fdd69c-3dd9-4114-baa7-62108f8a0d4e",
+      "name": "ELEVEN LABS",
+      "alwaysOutputData": false,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "40e1a8f3-5f6c-4fc3-a978-03f2d3c7c38b",
+              "name": "response",
+              "value": "={{$json.message}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        716,
+        -160
+      ],
+      "id": "c256803e-dfd2-48c0-9e12-ab68eb851795",
+      "name": "PRINT"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "62162a82-ae9f-48bb-b3d7-ee68757f7943",
+              "name": "prompt",
+              "value": "surprising recipe",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        260,
+        580
+      ],
+      "id": "c3536723-1088-4cdf-af06-f5fe60036424",
+      "name": "trigger recipe"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "62162a82-ae9f-48bb-b3d7-ee68757f7943",
+              "name": "prompt",
+              "value": "write a 8 sentence monologue about  competing in a turkish lantern popping tournament that begins with ‘did you ever leave your wallet in the hotel and realize you were sleeping at your own house the whole time?’",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        120,
+        -60
+      ],
+      "id": "fc338f29-cbe2-4493-b6ac-d5b295befb47",
+      "name": "trigger audio",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "prompt",
+              "value": "they are singing,, the handheld camera is rotating around them slowly zooming in on their faces"
+            },
+            {
+              "name": "image_url",
+              "value": "https://fal.media/files/elephant/w4rEK0ZDjIIx_NjX4utO0_1075364719684bde9c9850f1ef65f63b.jpg"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "74482a04-a24b-4ace-8ea8-0361af825694",
+      "name": "trigger video",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        220,
+        1080
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "40e1a8f3-5f6c-4fc3-a978-03f2d3c7c38b",
+              "name": "prompt",
+              "value": "={{$json[\"output\"]}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        800,
+        580
+      ],
+      "id": "1ca61776-7000-4536-9c06-e61f83ab2c76",
+      "name": "PRINT RECIPE"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "40e1a8f3-5f6c-4fc3-a978-03f2d3c7c38b",
+              "name": "response",
+              "value": "={{$json[\"output\"]}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1340,
+        440
+      ],
+      "id": "c62db6fc-f31a-4d7a-a738-b78fda4df3ad",
+      "name": "PRINT IMAGES"
+    },
+    {
+      "parameters": {
+        "resource": "assistant",
+        "assistantId": {
+          "__rl": true,
+          "value": "asst_9HwhHufaA5pOwTzpMCoWGRJM",
+          "mode": "list",
+          "cachedResultName": "vajunnie wellness recipe"
+        },
+        "prompt": "define",
+        "text": "={{$json[\"prompt\"]}} give only 2 lines",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        440,
+        580
+      ],
+      "id": "4cc9dc25-6ce5-4888-b4e8-b70e9e256caa",
+      "name": "recipe-gen",
+      "credentials": {
+        "openAiApi": {
+          "id": "kTWlML49D9NRlX7Z",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-3.5-turbo",
+          "mode": "list",
+          "cachedResultName": "GPT-3.5-TURBO"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "={{ $json.prompt }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        980,
+        400
+      ],
+      "id": "080000ea-1166-4aa6-8c47-f812f88db549",
+      "name": "image-prompt-gen",
+      "credentials": {
+        "openAiApi": {
+          "id": "kTWlML49D9NRlX7Z",
+          "name": "OpenAi account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $json.output || '';\n\n// Split every line that starts with \">\"\nconst lines = input.match(/^>.+$/gm) || [];\n\nreturn lines.map(line => ({\n  json: {\n    prompt: line.replace(/^>\\s*/, '').trim()\n  }\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1340,
+        300
+      ],
+      "id": "2480fee5-039c-4907-a324-aac7464a3fda",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "https://fal.run/fal-ai/flux-pro/kontext",
+        "options": {
+          "fullResponse": false
+        },
+        "bodyParametersUi": {
+          "parameter": [
+            {
+              "name": "=prompt",
+              "value": "=  {{ $json.prompt }}"
+            },
+            {
+              "name": "=image_url",
+              "value": "=https://v3.fal.media/files/elephant/VBIsXheultxcoJwBE3luf_IMG_2195.jpeg"
+            },
+            {
+              "name": "num_images",
+              "value": "1"
+            },
+            {
+              "name": "guidance_scale",
+              "value": "3.5"
+            },
+            {
+              "name": "safety_checker",
+              "value": "false"
+            },
+            {
+              "name": "aspect_ratio",
+              "value": "9:16"
+            }
+          ]
+        },
+        "headerParametersUi": {
+          "parameter": [
+            {
+              "name": "Authorization",
+              "value": "Key 5ff1c3a5-ad7d-4a1c-a29d-48c868b0fd7e:8bd25f59a623a06f690de0541f4876da"
+            },
+            {
+              "name": "Content-Type",
+              "value": " application/json"
+            }
+          ]
+        }
+      },
+      "id": "84557b16-b1a2-4a45-a225-e1b36341aa23",
+      "name": "FAL FLUX",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        2020,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 4
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1980,
+        300
+      ],
+      "id": "f6728057-74af-4f47-9bb7-d29498c2c020",
+      "name": "Wait1",
+      "webhookId": "8403cd11-0e92-4e28-a1c9-0bf2f6ae1ea8"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "40e1a8f3-5f6c-4fc3-a978-03f2d3c7c38b",
+              "name": "response",
+              "value": "={{$json[\"output\"]}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4400,
+        1020
+      ],
+      "id": "4852e12b-9f0c-4c82-9f04-5e225df91ccf",
+      "name": "PRINT IMAGES1"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "url",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        2380,
+        120
+      ],
+      "id": "44508dd4-66a4-4c15-be9d-24da15ebdc9d",
+      "name": "Split Out1",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"my_field_1\": \"value\",\n  \"my_field_2\": 1\n}\n",
+        "includeOtherFields": "={{ false }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3920,
+        220
+      ],
+      "id": "de0a8415-9ed2-445a-a7dc-60a1b7881ede",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "resource": "assistant",
+        "assistantId": {
+          "__rl": true,
+          "value": "asst_NNVPriMYImlwfwE304vxaCUx",
+          "mode": "list",
+          "cachedResultName": "vajunnie wellness 2PRE STAGE2 video prompt gen"
+        },
+        "prompt": "define",
+        "text": "={{$json[\"prompt\"]}}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        2180,
+        800
+      ],
+      "id": "d4e38fb9-9c11-4017-a216-d8938ec63f9a",
+      "name": "video-PRE-prompt",
+      "credentials": {
+        "openAiApi": {
+          "id": "kTWlML49D9NRlX7Z",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst sentences = items.map((item) => item.json.output.split(\". \"));\n\nconst sentencesWithoutNumbers = sentences.reduce((acc, curr) => {\n  curr.forEach((sentence) => {\n    if (!/\\d/.test(sentence)) {\n      acc.push({ sentence });\n    }\n  });\n  return acc;\n}, []);\n\nreturn sentencesWithoutNumbers;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2580,
+        800
+      ],
+      "id": "55b8cc75-ec8e-4238-8e20-55f5402ffd37",
+      "name": "Code2"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "sentence",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        2820,
+        800
+      ],
+      "id": "50b65cf8-9a0b-4832-8523-ed039254d402",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3140,
+        600
+      ],
+      "id": "909287be-a98a-4fb0-9ba0-a6a2e35b7541",
+      "name": "image * sentence * merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  { json: { url: 'https://hatrabbits.com/wp-content/uploads/2017/01/random.jpg' } },\n  { json: { url: 'https://plus.unsplash.com/premium_photo-1689530775582-83b8abdb5020?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGVyc29ufGVufDB8fDB8fHww' } }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2240,
+        460
+      ],
+      "id": "a413fde9-2109-443f-8164-be44362448a9",
+      "name": "Code3"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "GPT-4O"
+        },
+        "text": "=",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        3200,
+        220
+      ],
+      "id": "9fafbafa-bbd5-469f-ab60-f3dcedf89636",
+      "name": "OpenAI1",
+      "credentials": {
+        "openAiApi": {
+          "id": "kTWlML49D9NRlX7Z",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 2
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2620,
+        -240
+      ],
+      "id": "f59a3185-c2dd-42e8-8eca-ed5b67ed29ae",
+      "name": "Wait2",
+      "webhookId": "c180cb42-2513-46a8-bcdc-6d131a8927a9"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "GPT-4O"
+        },
+        "text": "={{ $('Split Out').item.json.sentence }}",
+        "inputType": "base64",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        3440,
+        600
+      ],
+      "id": "e866c39f-c32d-4fc6-8f23-384d5788ce20",
+      "name": "OpenAI2",
+      "credentials": {
+        "openAiApi": {
+          "id": "kTWlML49D9NRlX7Z",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1580,
+        300
+      ],
+      "id": "abc1be94-4fed-4d6f-a1d6-1baf22b5737f",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "resource": "assistant",
+        "assistantId": {
+          "__rl": true,
+          "value": "asst_lb2lDy8WLTeQ9bYKAqdSnKWE",
+          "mode": "list",
+          "cachedResultName": "vajunnie wellness 2FINAL STAGE2 video prompt gen"
+        },
+        "prompt": "define",
+        "text": "=make a video of {{ $json.content }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        3860,
+        480
+      ],
+      "id": "5e6e6935-329c-486e-b2d3-d0c492e5b881",
+      "name": "video-FINAL*prompt",
+      "credentials": {
+        "openAiApi": {
+          "id": "kTWlML49D9NRlX7Z",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2700,
+        120
+      ],
+      "id": "5b0a942f-b835-4041-b0d7-671bd712e758",
+      "name": "GET IMAGES"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "trigger video",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "trigger audio",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "trigger recipe",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Code3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "PRINT",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "ELEVEN LABS",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ELEVEN LABS": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PRINT": {
+      "main": [
+        []
+      ]
+    },
+    "trigger recipe": {
+      "main": [
+        [
+          {
+            "node": "recipe-gen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "trigger audio": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "trigger video": {
+      "main": [
+        [
+          {
+            "node": "KLING",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "recipe-gen": {
+      "main": [
+        [
+          {
+            "node": "PRINT RECIPE",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "image-prompt-gen": {
+      "main": [
+        [
+          {
+            "node": "PRINT IMAGES",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PRINT RECIPE": {
+      "main": [
+        [
+          {
+            "node": "image-prompt-gen",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "video-PRE-prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PRINT IMAGES": {
+      "main": [
+        []
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FAL FLUX": {
+      "main": [
+        []
+      ]
+    },
+    "KLING": {
+      "main": [
+        [
+          {
+            "node": "PRINT IMAGES1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out1": {
+      "main": [
+        [
+          {
+            "node": "GET IMAGES",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "video-PRE-prompt": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "image * sentence * merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Code3": {
+      "main": [
+        [
+          {
+            "node": "Split Out1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "image * sentence * merge": {
+      "main": [
+        [
+          {
+            "node": "OpenAI2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait2": {
+      "main": [
+        []
+      ]
+    },
+    "OpenAI2": {
+      "main": [
+        []
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "FAL FLUX",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET IMAGES": {
+      "main": [
+        [
+          {
+            "node": "image * sentence * merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "844ebdcf-ad17-4ea4-bc23-4a1a5a67e906",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7ab78dc711d7f4eb4d22087161c59a5336f9266bf683291ae9215acd6515cdc8"
+  },
+  "id": "8prr9OKYpFJGApQU",
+  "tags": []
+}
